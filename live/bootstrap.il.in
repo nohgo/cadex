@@ -1,0 +1,11 @@
+; OPT-IN: loading this file is the single CIW action. Installation never loads it.
+; Refuse to replace ANY existing SkillBridge server, including a Cadex server.
+when(get('pyStartServer 'ipc)
+  error("A SkillBridge server already exists in this GUI; Cadex will not replace it")
+)
+load(@BRIDGE_IL@)
+load(@LIVE_IL@)
+pyStartServer.exe=@SERVER_WRAPPER@
+pyStartServer.logName=@SERVER_LOG@
+pyRunScript.logName=@ATTACH_LOG@
+pyRunScript(@ATTACH_PY@ ?python @PYTHON@ ?block t)

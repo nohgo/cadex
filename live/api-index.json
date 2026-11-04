@@ -1,0 +1,11 @@
+{
+  "dbFindOpenCellViewByName": {"signature":"dbFindOpenCellViewByName(libName cellName viewName)","doc":"skdfref/cvio.html","note":"String names. Do not substitute dbFindOpenCellView (library ID) or invent ByType."},
+  "geGetEditCellViewWindow": {"signature":"geGetEditCellViewWindow(cv)","doc":"skdfref/chap1.html","note":"Find the target editor directly; avoid probing CIW/non-editor windows."},
+  "dbIsCellViewModified": {"signature":"dbIsCellViewModified(cv)","doc":"skdfref/instance.html","note":"Use this API, not an invented cv~>modified attribute."},
+  "schCheck": {"signature":"schCheck(cv) => (errorCount warningCount)","doc":"skcompref/chap2_re_schCheck.html","note":"A non-nil list is not success. Connectivity can change; verify invariants afterward."},
+  "dbSave": {"signature":"dbSave(cv) => t/nil","doc":"skdfref/cvio.html","note":"Use the managed --save gate instead of calling this from a job."},
+  "drain": {"signature":"drain(port)","doc":"sklangref/port.html","note":"SKILL stream flushing; fflush is not the installed SKILL API."},
+  "dbTransformBBox": {"signature":"dbTransformBBox(bbox transform)","doc":"skdfref/dbtrans.html","note":"Use cadexPin for a single symbol pin; inspect multi-shape pins explicitly."},
+  "schCreateWire": {"signature":"schCreateWire(cv \"draw\" \"full\" points 0.0625 0.0625 0)","doc":"skcompref/chap2_re_schCreateWire.html","note":"The cadexWire recipe encapsulates the UF schematic call verified in a real job."},
+  "vfoSetParam": {"signature":"vfoSetParam(cdfGetInstCDF(inst) parameterName value)","note":"Use cadexParam; preserve device-specific CDF types, units, expressions, and callbacks."}
+}
