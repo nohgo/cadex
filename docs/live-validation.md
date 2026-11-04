@@ -107,3 +107,45 @@ Its actual Cadence behavior is exercised separately by the raw task below.
 No GUI is contacted during implementation/fixture testing. Existing opted-in
 GUI attachment, batch launcher, bootstrap, startup and permission settings are
 preserved during deployment. Visual verification still requires the user.
+
+### Raw cascode test through a fresh VM Codex session
+
+Prompt (complete, with no follow-up guidance):
+
+> Turn the circuit in tut2/part3_param into a cascode.
+
+Session: `01a1a4c9-b8f6-7880-943e-f50fb5d23346`. The agent discovered the
+installed skill and references itself. All commands completed successfully; it
+did not reconstruct Python transport, guess missing APIs, or require manual
+correction. Every live-helper call requested `require_escalated` on the first
+attempt, using `~/cadence_work` as workdir and operation-specific justification.
+Automatic per-command review completed without requesting user interaction.
+No additional instruction was sent to this session after the initial task.
+
+The job created a matching `gpdk180/nmos` NM1 above NM0, with both devices
+W=2u/L=180n/m=1. Saved readback verified NM0.D=NM1.S, original V0=vgs at
+NM0.G, new V1=vcas at NM1.G, and NM0.S, both bulks and both voltage-source negative terminals on gnd!. NM1.D remains an open output, consistent with the
+original open-drain test circuit. The checker reported **0 errors/1 warning**
+before and after; updateConn, runSRC and runVIC were all enabled. `dbSave`
+succeeded, post-save modified state was nil, status was 0 and completion.ok
+was present. There were eight instances after the change.
+
+No electrical simulation or operating-point validation was performed; `vcas`
+is an expression requiring an appropriate testbench value. The agent's own
+final response identified the open output and pending visual review.
+**Database verification passed; live visual/readability verification remains
+pending user observation in TigerVNC.** No screenshots or window focus actions
+were used. No separate Virtuoso process or license was started.
+
+VM-local records (not committed; no private database or nonce in this source):
+
+- Agent prompt/events/final: `~/.local/state/cadex/live/agent-tests/cascode-raw.lG9clm/`
+- Submitted job/checks/post-save snapshot: `~/.local/state/cadex/live/runs/20261104T042145Z_job_e2_f2xzl/`
+- Generated job: `~/.local/state/cadex/live/jobs/20261104T042124Z_part3-param-cascode_hry5o4qn/`
+
+The seven known helper/report files from the preceding gate-source test were
+archived from `~/cadence_work/runs/part3_gate_source` into
+`~/.local/state/cadex/live/history/part3_gate_source_20261104T042018Z/`.
+The new test wrote no tooling artifacts into the Cadence project. Maintained
+source, installer, recipes, tests and instructions are tracked on the Cadex
+`codex/live-circuit-jobs` branch.
