@@ -3,6 +3,11 @@ name: cadence-layout
 description: Plan, implement or review analog IC layout and physical verification using an established project technology, device setup and DRC/LVS/extraction flow.
 ---
 
+The UF gpdk180 native Assura DRC/LVS and Quantus extraction route is now
+verified on a scratch design. Use [tool recipes](../cadence-virtuoso/references/tool-recipes.md)
+and cadex drc/lvs/pex for that bounded profile, rather than rediscovering retired
+Diva/RCX paths. Other technologies still require their actual project runsets.
+
 Establish the authorized schematic/layout targets, schematic/netlist revision,
 PDK/technology, device variants, units/grid, layer and via rules, and the actual
 project verification tools/runsets. Reuse existing project procedures. Do not
@@ -33,5 +38,5 @@ pass. Record versions/input identity and unresolved violations. Extraction and
 [post-layout simulation](../cadence-simulation/SKILL.md) must identify the
 extracted view/netlist and compare the relevant metrics with pre-layout evidence.
 Mark affected checks stale after edits. Distinguish layout saved, DRC clean,
-LVS matched, extracted performance and visual review. Installation of this skill
-does not establish a working UF physical-verification flow.
+LVS matched, extracted performance and visual review. The verified site profile
+does not establish another PDK's runsets or certify a new design.

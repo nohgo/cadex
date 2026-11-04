@@ -1,0 +1,13 @@
+{
+  "uf-gpdk180": {
+    "verified_on": "2026-11-04",
+    "evidence": "docs/full-tests/2026-11-04-fvf.md",
+    "scope": "UF ECE gpdk180, saved OA views; flat MOS CDL and MOS/R/C PEX adapters only",
+    "pdk": "/apps/cds/IC618/local/GPDK180",
+    "spectre": "spectre",
+    "assura": "/apps/cds/assura/tools/bin/assura",
+    "quantus": "/apps/cds/quantus221/tools/bin/qrc",
+    "lmutil": "/apps/cds/IC618/tools/bin/lmutil",
+    "model_mapping": {"nmos": "nmos1", "pmos": "pmos1"}
+  }
+}

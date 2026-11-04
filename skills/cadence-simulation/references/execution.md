@@ -27,16 +27,19 @@ For a requested transient plot, require the following evidence:
 
 ### VM runbook
 
-**Environment.** In Bash, use the site's `cadence_env` if defined. Otherwise run the following in the shell that will actually launch the tool. Repeat for each fresh shell. Run from the project's normal launch directory so its library and PDK configuration resolve.
+**Environment.** Use the installed cadex commands for the verified native flow;
+see [tool recipes](../../cadence-virtuoso/references/tool-recipes.md). They source
+site settings in private scratch and then enter the configured project. Do not
+source `/apps/settings` or `cadence_env` directly over project files: the site
+setup copies cds.lib and .cdsinit into its current directory.
 
-```bash
-source /apps/settings &&
-export PATH="/apps/cds/xcelium2309/tools.lnx86/bin:/apps/cds/xcelium2309/tools/bin:$PATH" &&
-command -v virtuoso spectre ocean xrun &&
-xrun -version
-```
-
-Confirm Xcelium 23.09 for Xcelium tasks. Source any project-specific setup in the order used by the known-good project launcher. Start a new Virtuoso GUI only in a graphical session when needed.
+For an established SV/AMS or other project launcher, preserve its verified setup
+and include-resolution context. If a custom launching shell must source the site
+setup, use its own private setup directory in that same shell, capture setup
+failure, reapply the Xcelium 23.09 PATH override, and then enter the project
+launch directory before running the tool. Confirm `xrun -version` for Xcelium
+tasks. Source project-specific settings in the known-good order. Start a new
+Virtuoso GUI only when authorized and a graphical session is available.
 
 **Build the right artifact.** Inspect the Makefile, launch script, filelist and generated ADE run command before constructing a new command. Preserve the working directory used to resolve relative paths. Keep build products separate using project-supported options.
 

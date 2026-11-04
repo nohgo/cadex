@@ -23,14 +23,14 @@ review may be delegated with the target, requirements and artifact paths. One
 owner integrates results; serialize design mutations and GUI requests. Do not
 require delegation, create one worker per skill, or change agent settings.
 
-For substantial work, maintain a compact design record using
-[the template](assets/design-record.md), normally at
-`<project>/.cadex/designs/<library>__<cell>/design.md`. Keep assumptions distinct
-from requirements. Record exact target views, DUT interfaces, source revision or
-hashes, bench/corner/variables, measurements, evidence paths and the next step.
-Place reusable tooling in Cadex Git and generated live jobs/logs in Cadex state;
-keep design records and intentional simulation deliverables contained in the
-project's supported output area. Do not place private design data in Cadex Git.
+Read [project format](references/project-format.md) when establishing project
+paths, creating a new workspace or organizing evidence. Use
+`~/.codex/scripts/cadex project show` to resolve the actual launch, results and
+agent directories. Preserve existing projects; full scaffolding is optional for
+small experiments. For substantial work use [the record template](assets/design-record.md)
+in the configured agent/designs/<design>/ area. Record requirements, assumptions,
+input identities, conditions, measurements, evidence paths and the next step.
+Reusable tooling belongs in Cadex Git; private designs/vendor data do not.
 
 Treat testbench planning as a distinct stage: analog design defines what must be
 demonstrated and under which conditions; simulation implements and validates the

@@ -3,6 +3,12 @@ name: cadence-simulation
 description: Design analog testbenches, run Spectre/ADE/OCEAN or existing Xcelium/AMS flows, and verify measurements and waveforms against circuit requirements.
 ---
 
+For UF native execution use the [verified tool recipes](../cadence-virtuoso/references/tool-recipes.md)
+and installed cadex netlist/spectre/psf commands. They contain site setup,
+netlisting output and release-specific mechanics; retain per-command review on
+the first licensed invocation. Inspect native evidence and task metrics, not just
+a manifest's completed state.
+
 Start from the question the test must answer, the exact DUT and its source
 identity. Read [testbench design](references/testbench-design.md) when creating
 or changing a bench. Read [execution and results](references/execution.md) for
@@ -32,7 +38,6 @@ does not establish electrical success.
 Record source/netlist/bench identity, models/corner, variables, analysis options,
 exact command, run directory and measured results. Invalidate affected results
 when inputs change. Keep the project's supported run layout and relative include
-resolution; otherwise contain deliberate outputs under its `.cadex/designs/`
-area. Tool probes and live transport artifacts belong in Cadex state, not among
+resolution; otherwise use the configured results area and its labeled run manifests. Tool probes and live transport artifacts belong in Cadex state, not among
 schematic files. Report pass/fail/inconclusive per requested metric; separate
 electrical results from database checks and visual readability.

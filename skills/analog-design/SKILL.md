@@ -38,6 +38,10 @@ owns constructing and validating that bench. For a working-circuit claim,
 establish a valid operating point before interpreting small-signal or dynamic
 performance. Choose further checks proportional to the requested function.
 Report what operates, what was measured and what remains an assumption.
+Review overshoot/settling, stability and headroom against the requested quality;
+a clean physical report cannot rescue poor electrical behavior. Retain failed
+bias/corner results when changing provisional operating assumptions; do not move
+user requirements to make the design appear to pass.
 
 Use [analog-design-flow](../analog-design-flow/SKILL.md) when coordination or a
 continuing design record is useful; a single design edit need not create one.

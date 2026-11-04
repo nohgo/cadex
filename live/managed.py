@@ -45,7 +45,7 @@ def api_help(name, runtime=None, docroot='/apps/cds/IC618/doc'):
     runtime = Path(runtime or Path(__file__).parent)
     index = json.loads((runtime / 'api-index.json').read_text())
     if not name:
-        return {'apis': sorted(index), 'recipes': ['cadexDescribe', 'cadexInst', 'cadexPin', 'cadexCreate', 'cadexParam', 'cadexWire', 'cadexDeleteWire', 'cadexExpectConnection', 'cadexExpectNet']}
+        return {'apis': sorted(index), 'recipes': ['cadexDescribe', 'cadexInst', 'cadexPin', 'cadexPinEscape', 'cadexStub', 'cadexCreate', 'cadexParam', 'cadexWire', 'cadexDeleteWire', 'cadexExpectConnection', 'cadexExpectNet']}
     if not re.fullmatch(r'[A-Za-z][A-Za-z0-9]*', name):
         raise LiveError('API name must be an identifier')
     result = dict(index.get(name, {}), name=name)

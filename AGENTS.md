@@ -6,3 +6,5 @@
 - For analog circuit topology, sizing, bias and loads use analog-design; for an end-to-end requested outcome use analog-design-flow. Use cadence-simulation for testbench design, simulation and measured results; cadence-layout for layout and physical checks; cadence-virtuoso for live/batch database operations, named edits and checked saves. Read the relevant skill as the task reaches that stage.
 - For SystemVerilog use sv-design-verification. For Verilog-A, Verilog-AMS, and analog model fidelity use vams-modeling.
 - Report what was actually exercised, the measured result or first actionable failure, and where I can find the run. Distinguish editor checks, elaboration, simulation, and physical verification.
+
+- For configured project paths and labeled native-tool runs, use ~/.codex/scripts/cadex project show and the relevant Cadex skill. Preserve existing project organization and normal Cadence startup; do not automatically migrate a working project.

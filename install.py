@@ -32,7 +32,7 @@ section = (src / "AGENTS.md").read_text().strip()
 old = global_file.read_text() if global_file.exists() else ""
 # Migrate only exact known managed sections; preserve all surrounding user text.
 heading = section.splitlines()[0]
-previous_sections = {"fe26ebab783797c2c5eb33bdbca8193a9d3af7e05691d43f7ddfe6b22bb6557b"}
+previous_sections = {"d193d6e187da4b6dd36a2c41bb18fbcfffd2b8d022abe18a03d10a7400fc0f14", "fe26ebab783797c2c5eb33bdbca8193a9d3af7e05691d43f7ddfe6b22bb6557b"}
 pattern = re.compile(r"(?m)^" + re.escape(heading) + r"\n.*?(?=^## |\Z)", re.DOTALL)
 matches = list(pattern.finditer(old))
 if not matches and heading in old.splitlines():
@@ -58,6 +58,11 @@ if found_skills != required_skills:
 launcher = src / "scripts/virtuoso-batch.sh"
 if not launcher.is_file():
     raise SystemExit("Missing scripts/virtuoso-batch.sh.")
+required_workflow = {"__init__.py", "cli.py", "project.py", "runs.py", "native.py",
+                     "formats.py", "skill.py", "profile.json"}
+missing_workflow = sorted(name for name in required_workflow if not (src / "workflow" / name).is_file())
+if missing_workflow:
+    raise SystemExit("Incomplete workflow bundle: " + ", ".join(missing_workflow))
 
 # Upgrade only known shipped content or the last installer-managed version.
 previous_cadence = {
@@ -74,6 +79,12 @@ sources = [(p, skills / p.relative_to(src / "skills"), 0o644)
                                      for part in p.relative_to(src / "skills").parts)]
 sources.append((launcher, codex / "scripts/virtuoso-batch.sh", 0o700))
 payloads = [(source.read_bytes(), dest, mode) for source, dest, mode in sources]
+workflow_dir = codex / "share/cadex"
+for source in sorted((src / "workflow").rglob("*")):
+    if source.is_file() and "__pycache__" not in source.parts and not source.name.startswith("._"):
+        payloads.append((source.read_bytes(), workflow_dir / source.relative_to(src / "workflow"), 0o600))
+workflow_wrapper = "#!/bin/sh\nexec {0} {1} \"$@\"\n".format(shlex.quote(sys.executable), shlex.quote(str(workflow_dir / "cli.py")))
+payloads.append((workflow_wrapper.encode(), codex / "scripts/cadex", 0o700))
 live_dir = codex / "share/cadex-live"
 state_dir = home / ".local/state/cadex/live"
 venv = home / ".venvs/cadex-live"

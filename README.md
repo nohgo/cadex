@@ -30,6 +30,45 @@ python3 install.py
 
 Re-run the same installer after updating the checkout. It copies the skills to `~/.agents/skills/`, installs `~/.codex/scripts/virtuoso-batch.sh`, and merges the VM instructions into `$CODEX_HOME/AGENTS.md` (default `~/.codex/AGENTS.md`). Upgrades back up replaced files under `~/.codex/ece-install-backups/` and stop on unrecognized local changes. Installation adds no SSH or Virtuoso startup hook.
 
+## Project format and native helpers
+
+For a full project, Cadex follows the separation illustrated by UF's SAR ADC
+workspace: launch Virtuoso in `cadence/`; keep RTL/testbench source separate.
+Use `agent/` for durable design records/notes and ignored scratchwork, and
+`results/<stage>/<label>/<unique-run>/` for native evidence and manifests.
+Project-specific skills belong in native `.agents/skills/` discovery.
+
+```bash
+~/.codex/scripts/cadex project init ~/my-chip --mode full --profile uf-gpdk180
+cd ~/my-chip/cadence
+~/.codex/scripts/cadex project show
+```
+
+Initialization is create-only and preserves existing instructions, library
+mappings and startup. It never launches a GUI, sources setup in the project,
+acquires a license or changes saved permissions. Existing RTL subrepos and
+other established project choices need no migration. Use `--mode small` for a
+flat small project, or use a legacy directory with cds.lib without configuring
+anything: output then stays in private Cadex state. Invocation-only
+`--profile uf-gpdk180` selects the bounded site recipe without saving config.
+
+The installed `cadex` CLI provides lexical SKILL preflight, contained native
+netlisting, isolated Spectre runs, Assura DRC/LVS, Quantus extraction, strict PEX
+translation, PSF ASCII inspection and source-freshness checks. Commands return
+concise summaries; full inputs/logs/evidence remain in their labeled runs. A
+completed tool run does not assert that engineering requirements passed.
+Failed attempts are retained and never automatically retried. Licensed commands
+use per-command reviewed execution on their first attempt; no saved permission
+change is needed.
+
+See [project format](skills/analog-design-flow/references/project-format.md) and
+[verified tool recipes and limits](skills/cadence-virtuoso/references/tool-recipes.md).
+The native CDL/PEX adapters intentionally cover the tested flat MOS/MOS-R-C
+flow, not arbitrary ADC hierarchies or other PDKs. Existing project verification
+flows remain usable; unsupported constructs fail explicitly instead of dropping
+devices. Installation updates runtime copies from the maintained `workflow/`
+source, leaving normal Virtuoso startup and explicit GUI opt-in unchanged.
+
 ## Verify and use
 
 In an ordinary VM shell, select a Cadence project and run the no-argument smoke test. It starts Virtuoso, enumerates the project's libraries, and exits.
@@ -73,11 +112,10 @@ bench-only requests without redesigning the DUT. Split it into a separate skill
 later if observed use establishes a distinct workflow needing independent discovery.
 
 A substantial design can keep its compact record under
-`<project>/.cadex/designs/<library>__<cell>/design.md`, using the shipped template.
+`<project>/agent/designs/<library>__<cell>/design.md`, using the shipped template.
 Record requirements, assumptions, target/revision, bench conditions, measured
 results and exact evidence paths. Changes mark affected old results stale.
-Retain established simulator output paths/include context; otherwise contain
-intentional outputs in that design area. Reusable tooling stays in Cadex Git;
+Retain established simulator output paths/include context; otherwise use the configured results area with labeled run manifests. Reusable tooling stays in Cadex Git;
 generated live jobs and audit logs stay under `~/.local/state/cadex/live/`.
 
 Skills are reusable instructions; one agent can use them across the flow.
@@ -86,15 +124,20 @@ analysis or review. It is not required or automatically enabled, and design
 mutations remain serialized with one owner integrating the results. No saved
 agent configuration or permission change is needed.
 
-The layout skill provides engineering and evidence guidance; it does not install
-or certify a UF DRC/LVS/extraction flow. It must discover established technology
-and runsets, and establish a layout-specific checked save path. The managed
-live helper's automatic check/save gate currently supports schematics only.
+The installed native helpers provide the tested UF gpdk180 Assura/Quantus
+flow within the documented adapter limits. Other technologies and device types
+need their established project flow. The managed live helper's automatic
+check/save gate currently supports schematics only; layout edits still require
+a verified layout-specific check/save path.
+
+See [project-workflow validation](docs/project-workflow-validation.md) for the
+isolated native regression, fresh VM agent test, and remaining limits.
 
 ## Repository layout
 
 - `skills/` contains the seven skill definitions, focused references, a design-record template and the optional UF tutorial inverter example.
-- `scripts/virtuoso-batch.sh` is the Linux launcher.
+- `scripts/virtuoso-batch.sh` is the Linux launcher; an opt-in managed output root preserves direct-invocation defaults.
+- `workflow/` implements the installed cadex entrypoint, project/run contracts and verified native-tool recipes.
 - `AGENTS.md` contains the instructions installed for VM Codex.
 - `install.py` performs the Linux installation. `install-on-ece.sh` transfers the same bundle over SSH from macOS.
 

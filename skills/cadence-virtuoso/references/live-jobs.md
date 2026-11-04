@@ -40,6 +40,8 @@ Verified recipes loaded for every managed job:
 | `cadexPin("I3" "G")` | Transformed pin center; rejects ambiguous multi-shape pins. |
 | `cadexCreate("LIB" "MASTER" "NEW_NAME" x:y "R0")` | Create from an existing symbol master; refuse name collisions. |
 | `cadexParam("I3" "w" "2u")` | Apply actual CDF parameter through callbacks and return its value. |
+| `cadexPinEscape("I3" "D" 0.5)` | Inspect opposing pins to obtain an outward schematic segment; supports rotations/mirrors. |
+| `cadexStub("I3" "D" "out" 0.5)` | Create a checked wire and named label, with a net assertion in managed live jobs. |
 | `cadexWire(list(x1:y1 x2:y2 ...))` | Create a schematic wire with the tested UF IC618 signature. |
 | `cadexDeleteWire(list(...))` | Delete exactly one inspected wire by its complete points list. |
 | `cadexRequire(condition "message")` | Fail a precondition explicitly. |

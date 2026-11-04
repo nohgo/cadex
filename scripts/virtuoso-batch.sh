@@ -48,6 +48,11 @@ run_root="$project/runs"
 if [[ -z "$job" || "$diagnostic" == true ]]; then
     run_root="$HOME/.local/state/codex/virtuoso"
 fi
+# Managed Cadex runs may opt into a labeled result tree; direct invocation defaults stay unchanged.
+if [[ -n "${CODEX_VIRTUOSO_RUN_ROOT:-}" ]]; then
+    [[ "$CODEX_VIRTUOSO_RUN_ROOT" == /* ]] || { printf 'CODEX_VIRTUOSO_RUN_ROOT must be absolute\n' >&2; exit 64; }
+    run_root="$CODEX_VIRTUOSO_RUN_ROOT"
+fi
 mkdir -p "$run_root"
 run=$(mktemp -d "$run_root/virtuoso_batch_$(date -u +%Y%m%dT%H%M%SZ)_XXXXXX")
 printf 'RUN=%s\n' "$run"

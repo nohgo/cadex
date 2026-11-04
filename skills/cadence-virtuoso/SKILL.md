@@ -23,6 +23,12 @@ For **every live-helper or Virtuoso batch-launcher invocation**, request reviewe
 
 ## Reuse verified mechanics
 
+For site setup, contained native netlisting, Spectre, Assura and Quantus, read
+[verified tool recipes](references/tool-recipes.md). Prefer installed cadex commands
+to recreating per-task wrappers. Lexically preflight batch jobs before a checkout;
+physical port labels and internal schematic net names have different semantics.
+
+
 Before a custom SKILL call, consult `virtuoso-live api FUNCTION` or the [verified API recipes](references/live-jobs.md). Prefer recipes. If the installed release's function/signature is unfamiliar, look it up rather than inventing it. Mechanical API errors should not require user guidance. Make one coherent job for a design change, and verify the result before another edit.
 
 Keep reusable helpers/recipes/tests in the Cadex Git repository. The installer deploys copies under ~/.codex and ~/.agents. Generated jobs, copied submitted code, logs and reports belong under ~/.local/state/cadex/live/{jobs,runs}; use new-job instead of creating bridge scripts in the Cadence project. Circuit deliverables intentionally requested by the user may use the project's runs area. Do not copy PDK/vendor code, session tokens, generated binaries or private design databases into Cadex Git.
