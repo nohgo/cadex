@@ -4,6 +4,7 @@ from datetime import datetime
 from hashlib import sha256
 import json
 import os
+import re
 from pathlib import Path
 from shutil import copy2, which
 import sys
@@ -29,14 +30,31 @@ manifest = codex / "ece-workflow-installed.json"
 installed = json.loads(manifest.read_text()) if manifest.exists() else {}
 section = (src / "AGENTS.md").read_text().strip()
 old = global_file.read_text() if global_file.exists() else ""
-if section.splitlines()[0] in old.splitlines() and section not in old:
-    raise SystemExit("Existing ECE section differs. Merge AGENTS.md manually.")
-updated = old if section in old else (old.rstrip() + "\n\n" + section + "\n").lstrip("\n")
+# Migrate only exact known managed sections; preserve all surrounding user text.
+heading = section.splitlines()[0]
+previous_sections = {"fe26ebab783797c2c5eb33bdbca8193a9d3af7e05691d43f7ddfe6b22bb6557b"}
+pattern = re.compile(r"(?m)^" + re.escape(heading) + r"\n.*?(?=^## |\Z)", re.DOTALL)
+matches = list(pattern.finditer(old))
+if not matches and heading in old.splitlines():
+    raise SystemExit("Incomplete ECE section. Review AGENTS.md before installing.")
+if len(matches) > 1:
+    raise SystemExit("Duplicate ECE sections. Review AGENTS.md before installing.")
+if matches:
+    match = matches[0]
+    current = match.group().rstrip()
+    if current != section and sha256(current.encode()).hexdigest() not in previous_sections:
+        raise SystemExit("Existing ECE section differs. Merge AGENTS.md manually.")
+    updated = old[:match.start()] + section + match.group()[len(current):] + old[match.end():]
+else:
+    updated = (old.rstrip() + "\n\n" + section + "\n").lstrip("\n")
 if updated != old and global_file.is_symlink():
     raise SystemExit("Global AGENTS.md is a symlink. Merge at its source.")
 
-if len(list((src / "skills").glob("*/SKILL.md"))) != 3:
-    raise SystemExit("Incomplete skill bundle.")
+required_skills = {"analog-design-flow", "analog-design", "cadence-simulation",
+                   "cadence-layout", "cadence-virtuoso", "sv-design-verification", "vams-modeling"}
+found_skills = {p.parent.name for p in (src / "skills").glob("*/SKILL.md")}
+if found_skills != required_skills:
+    raise SystemExit("Incomplete or unexpected skill bundle: " + ", ".join(sorted(found_skills ^ required_skills)))
 launcher = src / "scripts/virtuoso-batch.sh"
 if not launcher.is_file():
     raise SystemExit("Missing scripts/virtuoso-batch.sh.")

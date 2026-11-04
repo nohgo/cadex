@@ -1,12 +1,16 @@
 # Cadex
 
-A Cadence setup for Codex on UF ECE Linux. Cadex installs three Codex CLI skills and an on-demand Virtuoso batch launcher. Use it to write SV and Verilog-AMS, run simulations, and inspect or edit Virtuoso cellviews from a project terminal.
+A Cadence setup for Codex on UF ECE Linux. Cadex installs focused analog design-flow skills, the existing digital/modeling skills, and an on-demand Virtuoso batch launcher. Use it to write SV and Verilog-AMS, run simulations, and inspect or edit Virtuoso cellviews from a project terminal.
 
 | Skill | Use |
 | --- | --- |
-| `sv-design-verification` | Write RTL and self-checking SystemVerilog benches, then verify them with the project filelist. |
-| `vams-modeling` | Choose between RNM, Verilog-A, and Verilog-AMS and check a model against its intended behavior. |
-| `cadence-virtuoso` | Run Spectre/Xcelium benches, extract waveforms, and run SKILL jobs against Virtuoso. |
+| `analog-design-flow` | Coordinate the requested design stages, requirements, assumptions and evidence. |
+| `analog-design` | Engineer transistor topology, bias, sizing, loads and interfaces. |
+| `cadence-simulation` | Design testbenches, run analyses and verify measured results. |
+| `cadence-layout` | Plan/review layout and use an established physical-verification flow. |
+| `cadence-virtuoso` | Inspect/edit named views and execute reviewed live/batch SKILL jobs. |
+| `sv-design-verification` | Existing RTL and self-checking SystemVerilog workflow. |
+| `vams-modeling` | Existing RNM, Verilog-A and Verilog-AMS modeling workflow. |
 
 ## Install
 
@@ -52,9 +56,44 @@ codex --approve-for-me
 
 Use `/skills` to verify discovery. Then try “Read the inverter schematic and report the devices and nets.” The VM skill directs Codex to request review for a Virtuoso launch because the ordinary workspace sandbox can block licensing or the private display. Existing netlisted Spectre and digital Xcelium benches use their own project commands.
 
+## Analog design flow
+
+Give Codex an engineering outcome: a topology change, a working biased circuit,
+a measured performance target, or a layout deliverable. The flow skill chooses
+relevant stages and preserves that scope. A local edit remains a local edit;
+a working amplifier includes its bias, load/current path and operating-point
+validation. Physical implementation is included when requested, not inferred
+from every schematic task.
+
+Testbench design is a distinct stage owned by `cadence-simulation`, with a
+focused reference rather than another top-level skill. `analog-design` supplies
+the DUT interface, operating conditions and success criteria. Simulation owns
+constructing/validating the bench, analyses and measurements. This also supports
+bench-only requests without redesigning the DUT. Split it into a separate skill
+later if observed use establishes a distinct workflow needing independent discovery.
+
+A substantial design can keep its compact record under
+`<project>/.cadex/designs/<library>__<cell>/design.md`, using the shipped template.
+Record requirements, assumptions, target/revision, bench conditions, measured
+results and exact evidence paths. Changes mark affected old results stale.
+Retain established simulator output paths/include context; otherwise contain
+intentional outputs in that design area. Reusable tooling stays in Cadex Git;
+generated live jobs and audit logs stay under `~/.local/state/cadex/live/`.
+
+Skills are reusable instructions; one agent can use them across the flow.
+Optional delegation, when available and permitted, can handle independent
+analysis or review. It is not required or automatically enabled, and design
+mutations remain serialized with one owner integrating the results. No saved
+agent configuration or permission change is needed.
+
+The layout skill provides engineering and evidence guidance; it does not install
+or certify a UF DRC/LVS/extraction flow. It must discover established technology
+and runsets, and establish a layout-specific checked save path. The managed
+live helper's automatic check/save gate currently supports schematics only.
+
 ## Repository layout
 
-- `skills/` contains the three skill definitions and the optional UF tutorial inverter example.
+- `skills/` contains the seven skill definitions, focused references, a design-record template and the optional UF tutorial inverter example.
 - `scripts/virtuoso-batch.sh` is the Linux launcher.
 - `AGENTS.md` contains the instructions installed for VM Codex.
 - `install.py` performs the Linux installation. `install-on-ece.sh` transfers the same bundle over SSH from macOS.

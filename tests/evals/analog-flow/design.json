@@ -1,0 +1,22 @@
+{
+  "kind": "synthetic documentation-only fixture; no Cadence database or model files",
+  "target": {"library": "eval_lib", "cell": "cascode", "view": "schematic"},
+  "project_supply_V": 1.8,
+  "devices": [
+    {"name": "NM0", "model": "fixture_nmos", "w": "2u", "l": "180n", "m": 1,
+     "terminals": {"D": "vx", "G": "vin", "S": "gnd!", "B": "gnd!"}},
+    {"name": "NM1", "model": "fixture_nmos", "w": "2u", "l": "180n", "m": 1,
+     "terminals": {"D": "vout", "G": "vb", "S": "vx", "B": "gnd!"}}
+  ],
+  "bias_sources": [
+    {"name": "V0", "positive": "vin", "negative": "gnd!", "dc": "vgs"},
+    {"name": "V1", "positive": "vb", "negative": "gnd!", "dc": "vcas"}
+  ],
+  "provisional_variables_V": {"vgs": 0.55, "vcas": 0.95},
+  "output_load": null,
+  "targets": {"minimum_midband_gain_magnitude_V_per_V": 5, "external_output_capacitance_F": 1e-12},
+  "models": null,
+  "technology_and_verification_runsets": null,
+  "simulation_evidence": [],
+  "layout_evidence": []
+}

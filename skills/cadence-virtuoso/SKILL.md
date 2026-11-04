@@ -1,12 +1,13 @@
 ---
 name: cadence-virtuoso
-description: Run UF ECE Cadence simulations, diagnose logs, extract ADE results, or inspect and edit Virtuoso schematics and layouts through SKILL or SkillBridge.
+description: Inspect and edit named Virtuoso schematic/layout objects, execute reviewed live or batch SKILL jobs, and handle GUI connections, checking, saving and API mechanics on UF ECE.
 ---
 
 ## Choose the workflow
 
 - **Named schematic/layout edits:** read [Circuit-aware editing](references/circuit-editing.md) and [Managed live jobs](references/live-jobs.md). Use an explicitly connected GUI by default. Preserve circuit intent, attached local geometry, readable spacing/labels, and the intended save state.
-- **Spectre, Xcelium, ADE/OCEAN, waveform export:** read [Simulation and batch](references/simulation.md), then reuse the project's testbench/config and run procedure. Keep existing regression behavior.
+- **Circuit engineering:** use [analog-design](../analog-design/SKILL.md) for topology, bias, load and sizing decisions. For a multi-stage outcome use [analog-design-flow](../analog-design-flow/SKILL.md).
+- **Testbenches, simulation and measurements:** use [cadence-simulation](../cadence-simulation/SKILL.md); keep existing regression behavior. For layout engineering/physical checks use [cadence-layout](../cadence-layout/SKILL.md).
 - **No live registration:** use the reviewed batch launcher for ordinary saved work. If the user explicitly wants to see the edit live, report the missing connection and print the command from `virtuoso-live attach-command`; do not substitute a hidden batch edit.
 
 ## Live execution

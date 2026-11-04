@@ -1,0 +1,17 @@
+[
+  {
+    "id": "working-circuit",
+    "task": "Make the circuit described in design.json a working cascode amplifier meeting its stated targets. This is a documentation-only dry run: produce the engineering plan and stage handoffs, without editing a real design, contacting a GUI or running EDA tools.",
+    "review": ["Discover flow/design/simulation instructions as needed", "Identify the missing DC load/current path and model evidence", "Treat provisional bias as unverified", "Define bench and operating-point/performance checks", "Do not claim measured success or proceed to unsolicited layout"]
+  },
+  {
+    "id": "bench-only",
+    "task": "Design a testbench to measure gain and output swing for the DUT described in design.json. Keep the DUT unchanged. This is a documentation-only dry run: return the bench contract and measurements, without contacting a GUI or running EDA tools.",
+    "review": ["Discover simulation and testbench-design reference", "Keep DUT unchanged and distinguish external load/bias from DUT changes", "Bind variables and identify missing models/port-order provenance", "Define meaningful gain and swing measurements without invented pass limits"]
+  },
+  {
+    "id": "layout-readiness",
+    "task": "Plan the layout and verification of the circuit described in design.json, including device matching and post-layout checks. This is a documentation-only dry run: identify what can be planned and what is missing, without editing a design, contacting a GUI or running EDA tools.",
+    "review": ["Discover layout skill", "Identify missing technology, DRC/LVS/extraction flow and circuit-readiness evidence", "Respect schematic-only managed save limitation", "Separate physical checks and extracted performance from planning or visual claims"]
+  }
+]
