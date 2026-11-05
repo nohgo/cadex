@@ -32,7 +32,7 @@ section = (src / "AGENTS.md").read_text().strip()
 old = global_file.read_text() if global_file.exists() else ""
 # Migrate only exact known managed sections; preserve all surrounding user text.
 heading = section.splitlines()[0]
-previous_sections = {"d193d6e187da4b6dd36a2c41bb18fbcfffd2b8d022abe18a03d10a7400fc0f14", "fe26ebab783797c2c5eb33bdbca8193a9d3af7e05691d43f7ddfe6b22bb6557b"}
+previous_sections = {"bf026ce548c4237941937d6c50c000f844d9a7e316e0583c01d058f09c7f8ff1", "d193d6e187da4b6dd36a2c41bb18fbcfffd2b8d022abe18a03d10a7400fc0f14", "fe26ebab783797c2c5eb33bdbca8193a9d3af7e05691d43f7ddfe6b22bb6557b"}
 pattern = re.compile(r"(?m)^" + re.escape(heading) + r"\n.*?(?=^## |\Z)", re.DOTALL)
 matches = list(pattern.finditer(old))
 if not matches and heading in old.splitlines():

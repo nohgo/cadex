@@ -32,11 +32,12 @@ Re-run the same installer after updating the checkout. It copies the skills to `
 
 ## Project format and native helpers
 
-For a full project, Cadex follows the separation illustrated by UF's SAR ADC
-workspace: launch Virtuoso in `cadence/`; keep RTL/testbench source separate.
-Use `agent/` for durable design records/notes and ignored scratchwork, and
-`results/<stage>/<label>/<unique-run>/` for native evidence and manifests.
-Project-specific skills belong in native `.agents/skills/` discovery.
+Cadex works within the existing project's layout, launch scripts and conventions.
+A project does not need reorganizing to get help with a schematic, testbench or
+design decision. When a new workspace is needed, the optional initializer uses
+the separation illustrated by UF's SAR ADC: `cadence/` for Cadence, separate
+RTL/testbench source, `agent/` for records and scratchwork, and labeled `results/`
+for native evidence. Project-specific skills use native `.agents/skills/` discovery.
 
 ```bash
 ~/.codex/scripts/cadex project init ~/my-chip --mode full --profile uf-gpdk180
@@ -111,8 +112,9 @@ constructing/validating the bench, analyses and measurements. This also supports
 bench-only requests without redesigning the DUT. Split it into a separate skill
 later if observed use establishes a distinct workflow needing independent discovery.
 
-A substantial design can keep its compact record under
-`<project>/agent/designs/<library>__<cell>/design.md`, using the shipped template.
+Use existing design notes and records. For a new record, the shipped template
+can be used in the project's notes; the optional scaffold reserves
+`agent/designs/<library>__<cell>/` for these records.
 Record requirements, assumptions, target/revision, bench conditions, measured
 results and exact evidence paths. Changes mark affected old results stale.
 Retain established simulator output paths/include context; otherwise use the configured results area with labeled run manifests. Reusable tooling stays in Cadex Git;
@@ -121,8 +123,8 @@ generated live jobs and audit logs stay under `~/.local/state/cadex/live/`.
 Skills are reusable instructions; one agent can use them across the flow.
 Optional delegation, when available and permitted, can handle independent
 analysis or review. It is not required or automatically enabled, and design
-mutations remain serialized with one owner integrating the results. No saved
-agent configuration or permission change is needed.
+mutations remain serialized and delegated results are brought back into the
+shared design work. No saved agent configuration or permission change is needed.
 
 The installed native helpers provide the tested UF gpdk180 Assura/Quantus
 flow within the documented adapter limits. Other technologies and device types

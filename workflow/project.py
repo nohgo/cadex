@@ -76,8 +76,8 @@ def initialize(path, mode='full', profile=None):
     files = {
         'cadex.json': json.dumps(config, indent=2) + '\n',
         'AGENTS.md': '# Project workflow\n\nRead cadex.json for project paths; run `~/.codex/scripts/cadex project show`.\n'
-                     'Use cadence/ as the EDA working directory in full projects, or the configured\n'
-                     'launch directory otherwise. Read agent/README.md when creating work or results.\n'
+                     'Follow the project conventions and use the launch directory in cadex.json.\n'
+                     'Read agent/README.md when creating work or results.\n'
                      'Reuse installed Cadex skills; put only project-specific skills in .agents/skills.\n'
                      'A project or GUI process is not permission to attach; retain per-command review.\n',
         'agent/README.md': '# Agent workspace\n\n'

@@ -1,12 +1,16 @@
 # Project layout and evidence
 
-Use the project's existing organization. The reference on UF is
-`~/asar_adc_8bit`: a root containing `cadence/`, separate RTL, stimulus, synthesis
-and pictures. Referencing that structure is not permission to migrate or inspect
-its design databases. Cadex initializes new projects or explicitly adopts paths;
-it never moves an existing library, clears locks or replaces startup files.
+Start by navigating the project's existing organization, instructions and launch
+scripts. Most work takes place in an established workspace; its conventions take
+precedence over the example below. Configuration and scaffolding are useful when
+creating a new workspace, not prerequisites for helping with an existing design.
 
-## Full projects
+The reference on UF is `~/asar_adc_8bit`: a root containing `cadence/`, separate
+RTL, stimulus, synthesis and pictures. It illustrates one workable separation.
+Cadex can initialize a new project or configure existing paths without moving
+libraries, clearing locks or replacing startup files.
+
+## Optional starting layout for new projects
 
 ```text
 project/
@@ -24,7 +28,7 @@ project/
     work/                    Temporary jobs, caches and probes; ignored by Git
 ```
 
-Initialize explicitly:
+When a new workspace is needed, the optional initializer creates this layout:
 
 ```bash
 ~/.codex/scripts/cadex project init /path/to/new-project --mode full --profile uf-gpdk180
@@ -39,8 +43,9 @@ licensed commands isolate it in their own setup directory.
 
 `cadex.json` is the single path definition, discovered from the current directory
 upward. Run `~/.codex/scripts/cadex project show` before choosing directories.
-Full projects default to `cadence/`; small configured projects use `.`. Tool
-invocations use the configured launch directory as tool workdir. Start Codex at
+The initializer defaults to `cadence/` in full mode and `.` in small mode;
+existing configurations can choose other paths. Tool invocations use the
+configured launch directory as tool workdir. Start Codex at
 the project root, or within a Git repo so its root project skills are discoverable.
 Keep native `.agents/skills` for skills, rather than hiding skills in scratch.
 

@@ -15,7 +15,7 @@ or changing a bench. Read [execution and results](references/execution.md) for
 tool setup, netlisting, run commands, diagnostics and waveform delivery.
 
 Analog design supplies the intended function, operating conditions and success
-criteria; this skill owns bench implementation, bench validation, analyses and
+criteria; use this skill for bench implementation, validation, analyses and
 measurements. If those conditions are missing, inspect the project context or
 use [analog-design](../analog-design/SKILL.md) to resolve the material decisions.
 Bench-only requests are valid; do not redesign the DUT merely to make a test pass.

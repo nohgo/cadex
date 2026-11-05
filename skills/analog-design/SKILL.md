@@ -33,8 +33,8 @@ objects and read back actual device parameters, interfaces and connections.
 
 Hand simulation a clear contract: DUT/port order, supply and bias conditions,
 source/load impedance, operating range, required analyses and observables with
-units and acceptance limits. The [simulation skill](../cadence-simulation/SKILL.md)
-owns constructing and validating that bench. For a working-circuit claim,
+units and acceptance limits. Use the [simulation skill](../cadence-simulation/SKILL.md)
+to construct and validate that bench. For a working-circuit claim,
 establish a valid operating point before interpreting small-signal or dynamic
 performance. Choose further checks proportional to the requested function.
 Report what operates, what was measured and what remains an assumption.
