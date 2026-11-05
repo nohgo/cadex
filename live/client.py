@@ -18,6 +18,10 @@ class LiveError(RuntimeError):
     pass
 
 
+class NoConnectionError(LiveError):
+    pass
+
+
 def load_config():
     return json.loads((Path(__file__).parent / 'config.json').read_text())
 
@@ -114,7 +118,7 @@ def select_record(entries, session_id=None):
     if any(e['state'] != 'registered' for e in entries):
         raise LiveError('Stale or foreign session records; inspect status and choose --session explicitly')
     if not valid:
-        raise LiveError('No opted-in live GUI connection')
+        raise NoConnectionError('No opted-in live GUI connection')
     return valid[0]['_record']
 
 
@@ -258,6 +262,7 @@ def main(argv=None):
     config = load_config()
     parser = argparse.ArgumentParser(description='Opt-in live Virtuoso editing; never attaches automatically')
     parser.add_argument('--state-dir', default=config['state_dir'])
+    parser.add_argument('--session', help='Explicit registered session, before or after the operation')
     sub = parser.add_subparsers(dest='command')
     sub.add_parser('status', help='Registry/process/socket metadata only; no GUI calls')
     sub.add_parser('attach-command', help='Print the one-time CIW action; do not execute it')
@@ -272,11 +277,11 @@ def main(argv=None):
             action.add_argument('--save', action='store_true')
             action.add_argument('--allow-existing-edits', action='store_true')
         for key in ['library', 'cell', 'view']: action.add_argument('--' + key, required=True)
-        action.add_argument('--session')
+        action.add_argument('--session', default=argparse.SUPPRESS)
         action.add_argument('--timeout', type=float, default=60)
     run = sub.add_parser('run', help='Run a named-operation JSON job in an explicitly connected GUI')
     run.add_argument('job')
-    run.add_argument('--session')
+    run.add_argument('--session', default=argparse.SUPPRESS)
     run.add_argument('--timeout', type=float, default=30)
     args = parser.parse_args(argv)
     attach = 'load({})'.format(json.dumps(config['bootstrap']))
@@ -323,8 +328,12 @@ def main(argv=None):
         print(json.dumps(result, indent=2))
         return 0
     except (LiveError, OSError, ValueError, KeyError, ImportError, RuntimeError) as exc:
-        print(json.dumps({'error': str(exc), 'attach_command': attach,
-                          'retry': 'Do not blindly retry a failed edit; inspect its outcome first.'}), file=sys.stderr)
+        error = {'error': str(exc)}
+        if isinstance(exc, NoConnectionError):
+            error['attach_command'] = attach
+        if args.command in ['run', 'skill']:
+            error['retry'] = 'Do not blindly retry a failed edit; inspect its outcome first.'
+        print(json.dumps(error), file=sys.stderr)
         return 2
 
 

@@ -1,10 +1,11 @@
 ; Namespaced managed-job entrypoint. Loaded only for an explicit opted-in request.
 procedure(cadexJobTarget(lib cell view writable)
-  let((cv win kind)
+  let((cv win kind opened)
     unless(ddGetObj(lib cell view) error("Existing target not found: %s/%s/%s" lib cell view))
     cv=dbFindOpenCellViewByName(lib cell view)
     when(cv win=geGetEditCellViewWindow(cv))
     unless(win
+      opened=t
       kind=if(view=="layout" then "maskLayout" else "schematic")
       win=deOpenCellView(lib cell view kind nil if(writable then "a" else "r"))
     )
@@ -12,7 +13,7 @@ procedure(cadexJobTarget(lib cell view writable)
     cv=geGetEditCellView(win)
     unless(cv && cv~>libName==lib && cv~>cellName==cell && cv~>viewName==view error("Target identity mismatch"))
     when(writable && !member(cv~>mode list("a" "w")) error("Target is read-only; no lock override permitted"))
-    list(cv win)
+    list(cv win opened)
   )
 )
 procedure(cadexRequire(condition message)
@@ -78,7 +79,9 @@ procedure(cadexJobRun(token lib cell view path runDir save allowExisting inspect
       unless(dbSave(cadexCV) error("Save failed; edits remain open"))
       saved=t
     )
-    unless(inspection hiRedraw(cadexWindow))
+    ; Frame new editors only. Existing viewports and focus belong to the user.
+    when(caddr(target) && cadexCV~>bBox hiZoomIn(cadexWindow cadexCV~>bBox))
+    hiRedraw(cadexWindow)
     list(lib cell view dirty baseline finalCounts saved cadexResult
       unless(inspection cadexDescribe()))
   )

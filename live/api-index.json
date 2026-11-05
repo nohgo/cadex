@@ -7,5 +7,8 @@
   "drain": {"signature":"drain(port)","doc":"sklangref/port.html","note":"SKILL stream flushing; fflush is not the installed SKILL API."},
   "dbTransformBBox": {"signature":"dbTransformBBox(bbox transform)","doc":"skdfref/dbtrans.html","note":"Use cadexPin for a single symbol pin; inspect multi-shape pins explicitly."},
   "schCreateWire": {"signature":"schCreateWire(cv \"draw\" \"full\" points 0.0625 0.0625 0)","doc":"skcompref/chap2_re_schCreateWire.html","note":"The cadexWire recipe encapsulates the UF schematic call verified in a real job."},
-  "vfoSetParam": {"signature":"vfoSetParam(cdfGetInstCDF(inst) parameterName value)","note":"Use cadexParam; preserve device-specific CDF types, units, expressions, and callbacks."}
+  "vfoSetParam": {"signature":"vfoSetParam(cdfGetInstCDF(inst) parameterName value)","note":"Use cadexParam with actual CDF names; preserve PDK types/units/callbacks. Its verified analogLib/vdc vdc path is callback-free."},
+  "dbMoveFig": {"signature":"dbMoveFig(figure nil list(delta \"R0\"))","doc":"skdfref/figure.html","note":"Use cadexMoveFigures to avoid moving both an ownership parent and its attached label. nil destination preserves the figure ID."},
+  "dbReplaceProp": {"signature":"dbReplaceProp(object name \"string\" value)","doc":"skdfref/chap2.html","note":"Not a generic CDF bypass. cadexParam supports the callback-free analogLib/vdc vdc parameter; PDK parameters still use callbacks."},
+  "hiZoomIn": {"signature":"hiZoomIn(window bbox)","note":"Managed jobs fit only newly opened target editors; preserve an existing editor viewport and focus."}
 }

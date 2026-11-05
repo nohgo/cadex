@@ -39,20 +39,33 @@ Verified recipes loaded for every managed job:
 | `cadexInstTerm("I3" "G")` | Exact terminal association. |
 | `cadexPin("I3" "G")` | Transformed pin center; rejects ambiguous multi-shape pins. |
 | `cadexCreate("LIB" "MASTER" "NEW_NAME" x:y "R0")` | Create from an existing symbol master; refuse name collisions. |
-| `cadexParam("I3" "w" "2u")` | Apply actual CDF parameter through callbacks and return its value. |
+| `cadexParam("I3" "w" "2u")` | Apply an actual CDF parameter and read it back; preserve PDK callbacks. |
 | `cadexPinEscape("I3" "D" 0.5)` | Inspect opposing pins to obtain an outward schematic segment; supports rotations/mirrors. |
 | `cadexStub("I3" "D" "out" 0.5)` | Create a checked wire and named label, with a net assertion in managed live jobs. |
 | `cadexWire(list(x1:y1 x2:y2 ...))` | Create a schematic wire with the tested UF IC618 signature. |
-| `cadexDeleteWire(list(...))` | Delete exactly one inspected wire by its complete points list. |
+| `cadexMoveFigures(list(figures...) dx:dy)` | Move an explicitly inspected local group; deduplicate parents/children so attached labels move once. |
+| `cadexStretchWire(oldPoints newPoints)` | Change one straight axis-aligned wire in place; retain attached labels and their fractional anchors. Reject unsupported routing before changing it. |
+| `cadexDeleteWire(list(...))` | Delete exactly one inspected wire; refuse attached figures rather than silently deleting labels. |
 | `cadexRequire(condition "message")` | Fail a precondition explicitly. |
 | `cadexExpectConnection("I3" "G" "V0" "PLUS")` | Declare an intended connection, checked after extraction and before saving. |
 | `cadexExpectNet("V0" "MINUS" "gnd!")` | Declare an intended net identity. |
 | `cadexDescribe()` | Fresh complete target snapshot. |
 
+For `analogLib/vdc`, the actual voltage CDF parameter is **`vdc`**.
+`cadexParam("V0" "vdc" "0.7")` uses its callback-free native string parameter;
+`"dc"` is accepted as an explicit alias only for that master. Other parameters
+still require their real CDF names and callback path. An arbitrary stored property
+can exist yet be ignored by the netlister: confirm effective values in the native
+simulation deck when testing a parameter path, including expressions/units.
+
 For a coherent operation, group creation, parameter changes, local wire/ground
 adjustments, assertions and task output in one job. These are primitives; the
 agent still decides circuit topology and readable placement. Moving an origin
-alone does not stretch wires. See [circuit editing](circuit-editing.md).
+alone does not stretch wires. Select local wires/grounds explicitly, preserving
+shared routing; the helpers do not infer the circuit neighborhood. Include attached
+labels freely in a move group; ownership is deduplicated. Stretch retains text,
+orientation and ownership, but label readability and circuit connectivity still
+need review. See [circuit editing](circuit-editing.md).
 
 For unfamiliar calls, run `"$LIVE" api FUNCTION`. This consults the small
 verified index and installed release documentation without contacting a GUI.
@@ -76,6 +89,11 @@ authorization to include the existing pending work. Otherwise report that
 boundary before proceeding. Omit `--save` for an explicitly requested preview.
 Managed layout saving is currently unsupported; use the appropriate verified
 layout check/save flow rather than bypassing the schematic gate silently.
+
+Completion requests redraw for every target, including inspection, and fits the
+cell bounding box only when it opens a new editor. Reused editors retain their
+viewport; focus is not raised or changed. This is a paint request, not proof of
+what TigerVNC displays. Database verification and visual verification stay separate.
 
 The result contains `baseline_check`, `final_check`, `saved`, task `result`,
 and a fresh `readback` after checking/saving. Verify those values and the

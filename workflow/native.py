@@ -145,8 +145,8 @@ let((path out cv)
         if not inside(ade, path) or not path.is_file():
             raise Error('OCEAN output escaped its configured projectDir; no outside output was moved/deleted')
         ports = [json.loads(x) for x in (batch / 'ports.txt').read_text().splitlines()]
-        if not ports or any(not re.fullmatch('[A-Za-z_][A-Za-z0-9_]*', p) for p in ports):
-            raise Error('Unsupported or missing native port names')
+        if any(not re.fullmatch('[A-Za-z_][A-Za-z0-9_]*', p) for p in ports):
+            raise Error('Unsupported native port names')
         run.data.update(target={'library': lib, 'cell': cell, 'view': 'schematic'}, ports=ports, profile=pr)
         run.artifact('netlist', path)
         run.artifact('ports', batch / 'ports.txt')

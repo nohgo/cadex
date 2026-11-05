@@ -45,7 +45,7 @@ def api_help(name, runtime=None, docroot='/apps/cds/IC618/doc'):
     runtime = Path(runtime or Path(__file__).parent)
     index = json.loads((runtime / 'api-index.json').read_text())
     if not name:
-        return {'apis': sorted(index), 'recipes': ['cadexDescribe', 'cadexInst', 'cadexPin', 'cadexPinEscape', 'cadexStub', 'cadexCreate', 'cadexParam', 'cadexWire', 'cadexDeleteWire', 'cadexExpectConnection', 'cadexExpectNet']}
+        return {'apis': sorted(index), 'recipes': ['cadexDescribe', 'cadexInst', 'cadexPin', 'cadexPinEscape', 'cadexStub', 'cadexCreate', 'cadexParam', 'cadexWire', 'cadexDeleteWire', 'cadexMoveFigures', 'cadexStretchWire', 'cadexExpectConnection', 'cadexExpectNet']}
     if not re.fullmatch(r'[A-Za-z][A-Za-z0-9]*', name):
         raise LiveError('API name must be an identifier')
     result = dict(index.get(name, {}), name=name)
@@ -115,6 +115,7 @@ def execute(state_dir, record, job, target, save=False, allow_existing=False,
             finally:
                 ws.close()
     except Exception as exc:
-        (directory / 'failure.json').write_text(json.dumps({'error': str(exc), 'outcome': 'possibly partial; inspect before retrying'}, indent=2) + '\n')
+        message = str(exc).replace(record['token'], '<session-token>')
+        (directory / 'failure.json').write_text(json.dumps({'error': message, 'outcome': 'possibly partial; inspect before retrying'}, indent=2) + '\n')
         (directory / 'status').write_text('2\n')
-        raise LiveError('{}; RUN={}'.format(exc, directory))
+        raise LiveError('{}; RUN={}'.format(message, directory))

@@ -7,6 +7,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 from test_live import Fixture, ROOT, client
 import managed
@@ -67,6 +68,15 @@ class ManagedTests(unittest.TestCase):
         self.assertEqual((runs[0] / 'status').read_text(), '2\n')
         self.assertTrue((runs[0] / 'failure.json').exists())
         self.assertFalse((runs[0] / 'completion.ok').exists())
+    def test_failure_redacts_session_nonce(self):
+        with patch.object(client, 'open_workspace', side_effect=RuntimeError('bridge failed ' + self.fixture.token)):
+            with self.assertRaises(client.LiveError) as raised:
+                managed.execute(self.root, self.fixture.record, self.job, self.target)
+        self.assertNotIn(self.fixture.token, str(raised.exception))
+        failure = next((self.root / 'runs').glob('*/failure.json')).read_text()
+        self.assertNotIn(self.fixture.token, failure)
+        self.assertIn('<session-token>', failure)
+
     def test_installed_managed_commands_use_fixture_only(self):
         home = self.root / 'installed'
         installed = subprocess.run([sys.executable, str(ROOT / 'install.py'), '--home', str(home)], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
@@ -83,6 +93,22 @@ class ManagedTests(unittest.TestCase):
         executed = subprocess.run(common + ['skill', str(self.job), '--library', 'fixture_lib', '--cell', 'fixture_cell', '--view', 'schematic', '--save'], capture_output=True, text=True)
         self.assertEqual(executed.returncode, 0, executed.stderr)
         self.assertTrue(json.loads(executed.stdout)['saved'])
+        target_args = ['--library', 'fixture_lib', '--cell', 'fixture_cell', '--view', 'schematic']
+        for selection in [['--session', self.fixture.id, 'inspect'], ['inspect', '--session', self.fixture.id]]:
+            selected = subprocess.run(common + selection + target_args, capture_output=True, text=True)
+            self.assertEqual(selected.returncode, 0, selected.stderr)
+            self.assertEqual(json.loads(selected.stdout)['session'], self.fixture.id)
+        count = len(self.fixture.requests)
+        wrong = subprocess.run(common + ['--session', 'cadex_' + '0'*32, 'inspect'] + target_args, capture_output=True, text=True)
+        self.assertEqual(wrong.returncode, 2)
+        self.assertEqual(len(self.fixture.requests), count)
+        bad_api = subprocess.run(common + ['api', 'noSuchCadenceAPI'], capture_output=True, text=True)
+        self.assertEqual(bad_api.returncode, 2)
+        self.assertNotIn('attach_command', json.loads(bad_api.stderr))
+        missing = subprocess.run([str(helper), '--state-dir', str(self.root / 'empty'), 'inspect',
+                                  '--library', 'fixture_lib', '--cell', 'fixture_cell', '--view', 'schematic'], capture_output=True, text=True)
+        self.assertEqual(missing.returncode, 2)
+        self.assertIn('attach_command', json.loads(missing.stderr))
         self.assertTrue(self.fixture.thread.is_alive())
 
 

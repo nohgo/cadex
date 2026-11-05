@@ -35,7 +35,7 @@
         "output_tokens": 2597,
         "reasoning_output_tokens": 66
       },
-      "assessment": "functional_pass; attached_label_translation_caveat"
+      "assessment": "voltage_task_failed_false_positive_oracle; geometry_saved_with_label_translation_caveat"
     },
     "layout": {
       "prompt": "Lay out eval_ic/mirror_core in this project and verify it against the schematic. Aim for a sensible analog current-mirror layout.",
@@ -69,7 +69,7 @@
         "output_tokens": 5005,
         "reasoning_output_tokens": 177
       },
-      "assessment": "functional_pass_after_recovery; new_view_visual_completion_required_evaluator_refresh"
+      "assessment": "voltage_task_failed_false_positive_oracle; geometry_saved_after_recovery; visual_completion_required_evaluator_refresh"
     }
   },
   "vams-independent-values": {
@@ -130,7 +130,6 @@
     }
   },
   "schematic-independent-result": {
-    "source_dc_V": 0.7,
     "source_delta_y": -0.25,
     "ground_delta_y": -0.25,
     "terminal_net_maps_preserved": true,
@@ -145,7 +144,9 @@
     ],
     "other_cell_unchanged": true,
     "BIAS_label_delta_y": -0.5,
-    "BIAS_label_still_on_wire": true
+    "BIAS_label_still_on_wire": true,
+    "unused_dc_property": 0.7,
+    "effective_voltage_verified": false
   },
   "layout-render-independent": {
     "rendered_rectangles": 110,
@@ -175,7 +176,6 @@
     "private_display_capture": true
   },
   "live-saved-independent-result": {
-    "source_dc_V": 0.65,
     "source_delta_y": -0.25,
     "ground_delta_y": -0.25,
     "terminal_net_maps_preserved": true,
@@ -188,7 +188,9 @@
       "VOUT",
       "G1"
     ],
-    "other_cell_unchanged": true
+    "other_cell_unchanged": true,
+    "unused_dc_property": 0.65,
+    "effective_voltage_verified": false
   },
   "cleanup-proof": {
     "private_gui_running": false,
@@ -254,5 +256,18 @@
     "evaluator_refresh_made_view_visible": true,
     "TigerVNC_contacted": false,
     "unassisted_live_visual_pass_claimed": false
+  },
+  "erratum": {
+    "reason": "Revision-1 voltage oracle accepted unused analogLib/vdc dc property; actual CDF is vdc. Native deck omitted requested voltage. Local 0 also mapped to _net0, not ground.",
+    "withdrawn": [
+      "schematic voltage pass",
+      "live voltage pass"
+    ],
+    "unaffected": [
+      "VAMS",
+      "mirror layout verification",
+      "geometry/check/save/reconnect observations"
+    ],
+    "corrected_fixture_revision": 2
   }
 }

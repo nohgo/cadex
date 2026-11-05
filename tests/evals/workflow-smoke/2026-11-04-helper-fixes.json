@@ -1,0 +1,119 @@
+{
+  "evidence_root": "~/.local/state/cadex/helper-tests/native_xh4l9m95",
+  "unlicensed_tests": {
+    "passed": 54
+  },
+  "native_recipes": {
+    "passed": true,
+    "move_roots": 4,
+    "attached_label_preserved": true,
+    "native_source_voltage_V": 0.7,
+    "native_mos_width": "12u"
+  },
+  "vm_agent": {
+    "thread": "01a1a9df-fc69-7b72-acb8-3c24cbdd9a89",
+    "prompt": "In eval_ic/bias_demo/schematic, set VBIAS to 0.65 V and move it down slightly. Check and save it.",
+    "duration_s": 76.5,
+    "shell_commands": 11,
+    "nonzero_commands": 2,
+    "user_interaction_required": false,
+    "remaining_friction": [
+      "session-option placement; fixed after forward sample and tested via fixture clients",
+      "bare python unavailable; environment unchanged"
+    ]
+  },
+  "unchanged_batch_smoke": {
+    "status": 0,
+    "completion_marker": true,
+    "smoke_marker": true,
+    "library_count": 12
+  },
+  "TigerVNC_contacted": false,
+  "independent-agent-proof": {
+    "native_voltage_V": 0.65,
+    "source_delta_y": -0.25,
+    "ground_delta_y": -0.25,
+    "terminal_net_maps_preserved": true,
+    "pins_on_wire_geometry": 10,
+    "instance_count": 5,
+    "shape_count": 14,
+    "BIAS_label_preserved_at_fixed_net_anchor": true,
+    "instance_bbox_overlaps": [],
+    "unrelated_instances_unchanged": [
+      "M0",
+      "VOUT",
+      "G1"
+    ],
+    "other_cell_unchanged": true,
+    "independent_native_netlist": "/ecel/UFAD/nohgoering/.local/state/cadex/helper-tests/native_xh4l9m95/gui-project/results/netlist/independent-agent-voltage/20261105T040617Z_esr78rzz/native/ade/bias_demo/spectre/schematic/netlist/input.scs"
+  },
+  "gui-proof": {
+    "new_bias_view_snapshot": true,
+    "new_mirror_view_snapshot": true,
+    "existing_viewport_preserved": true,
+    "gui_alive_same_identity": true,
+    "private_display_captures": [
+      "bias-opened.png",
+      "mirror-opened.png"
+    ],
+    "first_view_bbox": [
+      [
+        [
+          -0.225,
+          -1.2375
+        ],
+        [
+          9.05,
+          5.9875
+        ]
+      ],
+      [
+        [
+          0.2375,
+          1.0
+        ],
+        [
+          8.5875,
+          3.75
+        ]
+      ]
+    ]
+  },
+  "cleanup-proof": {
+    "private_gui_running": false,
+    "private_server_running": false,
+    "post_cleanup_status": {
+      "sessions": [
+        {
+          "id": "cadex_0eb5f0e22b1647ee9c83df7d2e734d48",
+          "state": "invalid",
+          "reason": "Stale gui process"
+        }
+      ],
+      "attach_command": "load(\"/home/UFAD/nohgoering/.codex/share/cadex-live/bootstrap.il\")",
+      "contacts_gui": false
+    }
+  },
+  "review-summary": [
+    {
+      "operation": "other",
+      "require_escalated": true
+    },
+    {
+      "operation": "inspect",
+      "require_escalated": true
+    },
+    {
+      "operation": "inspect",
+      "require_escalated": true
+    },
+    {
+      "operation": "other",
+      "require_escalated": true
+    },
+    {
+      "operation": "skill",
+      "require_escalated": true
+    }
+  ]
+}

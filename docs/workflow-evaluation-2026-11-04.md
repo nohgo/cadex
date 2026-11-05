@@ -1,12 +1,24 @@
 # Fresh VM workflow evaluation — November 4, 2026
 
 Cadex is useful as a design teammate, but common operations still incur too much
-mechanical recovery. Four fresh VM Codex sessions reached correct functional or
-saved-database outcomes without follow-up prompts. That does not make the live
+mechanical recovery. Four fresh VM Codex sessions completed without follow-up prompts. Two source-voltage
+acceptances were false positives, as corrected below. That does not make the live
 experience polished: two failed live jobs left partial unsaved work, and a newly
 opened view needed an evaluator-driven display refresh before it was visible.
 The next investment should be reliable edit primitives and operation feedback,
 not another broad role skill or a larger agent hierarchy.
+
+## Correction: source-voltage verification
+
+Follow-up native netlisting found that the revision-1 fixture and its oracle used
+an unused `dc` database property on `analogLib/vdc`. Its real CDF parameter is
+`vdc`; neither the requested 0.7 V nor 0.65 V appeared in the native deck. The
+original schematic/live voltage pass claims are withdrawn. Geometry, checker,
+save and reconnect evidence remain valid; those do not prove voltage behavior.
+The original source/bulk label `0` also netlisted as local `_net0`, rather than
+global simulator ground. Revision-2 fixtures use `vdc` and `gnd!`, and helper
+regressions inspect a separately generated native deck. Raw original evidence is
+retained. VAMS and mirror-layout results are unaffected by this fixture defect.
 
 ## Method and boundaries
 
@@ -47,9 +59,9 @@ candidate finished and are not counted as unassisted candidate behavior.
 | Task | Candidate time / shell commands | Independent outcome |
 | --- | --- | --- |
 | Create a VAMS bench, test and give feedback; preserve the DAC | 2m25s / 13 | Correctly exposed the seeded reference-update defect. All 464 voltage samples recomputed independently; four failed as expected. |
-| Set VBIAS to 0.7 V, move it down, check/save | 2m26s / 18 | Saved 0.7 V; source and local ground moved -0.25; all ten pins meet wire geometry; original net maps, neighbors and other cell preserved. Label translation caveat below. |
+| Set VBIAS to 0.7 V, move it down, check/save | 2m26s / 18 | Stored an unused dc=0.7 property (voltage task failed); source and local ground moved -0.25; all ten pins meet wire geometry; original net maps, neighbors and other cell preserved. Label translation caveat below. |
 | Lay out a simple current mirror and verify it | 6m08s / 41 | Independent DRC zero and LVS match: two 4/1 µm NMOS, three ports. All 110 rendered rectangles match independently reopened saved geometry. |
-| Set VBIAS to 0.65 V and move it down in the private GUI | 3m36s / 29 | Installed live helper used; eventual saved result independently confirmed with another batch process. Fresh live clients reconnected to the same GUI and opened another existing view. UI caveat below. |
+| Set VBIAS to 0.65 V and move it down in the private GUI | 3m36s / 29 | Installed live helper used; geometry/save independently confirmed. The unused dc=0.65 property did not set native voltage. Fresh live clients reconnected to the same GUI and opened another existing view. UI caveat below. |
 
 All candidate CLI exits were zero. Native bench failure is a different result:
 the DAC intentionally violates its contract and the generated runner correctly
@@ -105,15 +117,16 @@ co-simulation, connect rules or behavioral-to-transistor equivalence.
 The agent inspected the source and neighborhood, included G0 and local wire/label
 geometry, checked the baseline, and saved only after zero errors/warnings with
 connectivity extraction and both recorded rule checks enabled. A separate process
-reopened the saved view. The evaluator independently checked the voltage, source
+reopened the saved view. The evaluator checked only the unused dc property, source
 and ground translation, every terminal-to-net map, pin-on-wire geometry, unchanged
 M0/VOUT/G1, untouched neighboring cell and absence of instance-box overlap.
 
 One failed attempt used the PDK-style `vfoSetParam` path on the analogLib source.
-It recovered by inspecting saved state and using the verified native dc property.
+Its fallback stored an unused dc property. The CDF guard was right to reject that
+name; the evaluator incorrectly accepted the fallback without native netlisting.
 However, the BIAS label moved -0.50 while the source moved -0.25: moving its wire
 already translated the attached label, which the job then moved again. It stayed
-on the correct wire with clear spacing here. The circuit outcome passed; this
+on the correct wire with clear spacing here. The voltage outcome failed; the geometry result
 exposes a child-geometry ownership problem, not a universally safe move operation.
 
 The agent chose the legacy direct batch launcher, placing logs in `cadence/runs/`
@@ -156,7 +169,7 @@ replaced a wire without preserving its attached label, creating floating nets.
 The managed checker refused to save. The agent inspected its own partial work,
 repaired it, restored zero errors/warnings and saved. It did not seek user help.
 
-Independent saved-file inspection confirmed 0.65 V, a -0.25 source/ground move,
+Independent saved-file inspection confirmed the unused dc=0.65 property, a -0.25 source/ground move,
 all ten pin/wire contacts, preserved net maps and unchanged neighbors. Fresh
 clients returned to the same GUI PID/start identity; opening the other existing
 view succeeded there; the GUI remained running after clients disconnected.
@@ -174,6 +187,8 @@ Teardown confirmed the private GUI/server were gone, its X display lock was gone
 and metadata-only status identified the record as stale without contacting a GUI.
 The generic batch smoke then completed with STATUS=0, a completion marker and
 12 libraries. No batch driver was loaded into the live process.
+
+Follow-up implementation and validation: [helper fixes](helper-fixes-2026-11-04.md).
 
 ## Priorities supported by the evidence
 
@@ -235,4 +250,4 @@ favors scoped instructions and conditional detail. These tests support that
 approach: role framing and skill discovery were adequate; most avoidable work
 was API, execution, geometry or feedback handling. The new pair/autonomous role
 statement can stay short. No production framework changes were made during the
-benchmark, and no changes proposed here have been silently deployed.
+benchmark. Subsequent helper corrections and their validation are recorded separately.

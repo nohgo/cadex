@@ -211,6 +211,24 @@ class WorkflowTests(unittest.TestCase):
             with self.assertRaisesRegex(project.Error,'source changed'):native.pex(self.p,lvs.path,'stale','VSS')
             execute.assert_not_called()
 
+    def test_native_netlist_accepts_zero_port_testbench_but_rejects_bad_names(self):
+        self.sources()
+        pr = self.fake_profile()
+        model = Path(pr['pdk']) / 'models/spectre/gpdk.scs'
+        model.parent.mkdir(parents=True); model.write_text('fixture models')
+        for names, expected in [([], 'complete'), (['valid_port'], 'complete'), (['bad port'], 'failed')]:
+            def fake(run, *args, **kw):
+                batch = run.path / 'native/batch'; batch.mkdir()
+                deck = run.path / 'native/ade/input.scs'; deck.parent.mkdir(); deck.write_text('synthetic native deck')
+                (batch / 'netlist_path.txt').write_text(json.dumps(str(deck)))
+                (batch / 'ports.txt').write_text(''.join(json.dumps(name) + '\n' for name in names))
+                run.data['native_exit'] = 0
+                return batch
+            with patch.object(native, 'profile', return_value=pr), patch.object(native, 'skill_job', side_effect=fake):
+                result = native.netlist(self.p, 'lib', 'buffer', 'zero-port-fixture', 'NN')
+            self.assertEqual(result['state'], expected, result)
+            self.assertEqual((Path(result['run']) / 'completion.ok').exists(), expected == 'complete')
+
     def test_native_drc_zero_exit_with_violations_is_not_complete(self):
         self.sources();pr=self.fake_profile()
         def fake(run,*args,**kw):
