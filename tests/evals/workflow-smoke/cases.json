@@ -1,0 +1,46 @@
+[
+  {
+    "id": "vams",
+    "prompt": "Create a VAMS testbench for the DAC block in this project, run some tests, and tell me what looks solid or concerning. Keep the block itself unchanged.",
+    "checks": [
+      "Discover relevant skills without their names in the prompt",
+      "Keep model unchanged",
+      "Run native Xcelium and test reference-only updates as well as static transfer",
+      "Report seeded defect without claiming electrical verification",
+      "Corrected-model replay passes; gain/disable/stuck-output mutations fail"
+    ]
+  },
+  {
+    "id": "schematic",
+    "prompt": "In eval_ic/bias_demo/schematic, set VBIAS to 0.7 V and move it down slightly. Check and save it.",
+    "checks": [
+      "Saved voltage 0.7 V",
+      "Move source and local ground together",
+      "Preserve terminal nets and wire/pin geometry; leave unrelated instances/cell unchanged",
+      "Check/save and independently reopen",
+      "Review attached-label motion, not only instance origins"
+    ]
+  },
+  {
+    "id": "layout",
+    "prompt": "Lay out eval_ic/mirror_core in this project and verify it against the schematic. Aim for a sensible analog current-mirror layout.",
+    "checks": [
+      "Preserve saved schematic",
+      "Two gpdk180 NMOS devices, each W/L=4/1 um; ports REF OUT VSS",
+      "Native default-deck DRC zero and LVS match on final inputs",
+      "Render from saved geometry and state matching/extraction limits"
+    ]
+  },
+  {
+    "id": "live",
+    "prompt": "In eval_ic/bias_demo/schematic, set VBIAS to 0.65 V and move it down slightly. Check and save it.",
+    "checks": [
+      "Select only authorized private GUI/session/registry",
+      "Use reviewed installed live helper; do not load batch driver into GUI",
+      "Save voltage 0.65 V and complete connected branch move",
+      "Failed edit/check leaves evidence and does not save a bad view",
+      "Fresh clients reconnect to same GUI; another existing closed view opens there",
+      "Verify saved database and GUI remains open; separately inspect actual display painting"
+    ]
+  }
+]

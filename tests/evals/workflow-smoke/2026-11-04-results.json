@@ -1,0 +1,258 @@
+{
+  "tested_commit": "fda113f",
+  "native_codex_version": "0.166.0",
+  "evidence_root": "/home/UFAD/nohgoering/.local/state/cadex/workflow-evals/collaboration_20261104_xv92vawi",
+  "cases": {
+    "vams": {
+      "prompt": "Create a VAMS testbench for the DAC block in this project, run some tests, and tell me what looks solid or concerning. Keep the block itself unchanged.",
+      "thread": "01a1a99a-f5f1-7161-8d83-f0cd3ff4de07",
+      "model": "gpt-6.1-sol",
+      "exit": 0,
+      "duration_s": 144.673,
+      "commands": 13,
+      "nonzero_commands": 4,
+      "usage": {
+        "input_tokens": 326831,
+        "cached_input_tokens": 310656,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 4519,
+        "reasoning_output_tokens": 79
+      },
+      "assessment": "agent_task_pass; seeded_DUT_contract_failure_correctly_reported"
+    },
+    "schematic": {
+      "prompt": "In eval_ic/bias_demo/schematic, set VBIAS to 0.7 V and move it down slightly. Check and save it.",
+      "thread": "01a1a99f-1019-76c3-a1cb-e911921fe326",
+      "model": "gpt-6.1-sol",
+      "exit": 0,
+      "duration_s": 146.28,
+      "commands": 18,
+      "nonzero_commands": 1,
+      "usage": {
+        "input_tokens": 366011,
+        "cached_input_tokens": 341504,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 2597,
+        "reasoning_output_tokens": 66
+      },
+      "assessment": "functional_pass; attached_label_translation_caveat"
+    },
+    "layout": {
+      "prompt": "Lay out eval_ic/mirror_core in this project and verify it against the schematic. Aim for a sensible analog current-mirror layout.",
+      "thread": "01a1a9a2-d7c6-7db2-9435-8adc00af9317",
+      "model": "gpt-6.1-sol",
+      "exit": 0,
+      "duration_s": 367.597,
+      "commands": 41,
+      "nonzero_commands": 6,
+      "usage": {
+        "input_tokens": 1428980,
+        "cached_input_tokens": 1384960,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 9172,
+        "reasoning_output_tokens": 620
+      },
+      "assessment": "functional_pass_after_native_DRC_iteration"
+    },
+    "live": {
+      "prompt": "In eval_ic/bias_demo/schematic, set VBIAS to 0.65 V and move it down slightly. Check and save it.",
+      "thread": "01a1a9b0-1382-7b73-b51a-93fd7c1f2848",
+      "model": "gpt-6.1-sol",
+      "exit": 0,
+      "duration_s": 215.711,
+      "commands": 29,
+      "nonzero_commands": 5,
+      "usage": {
+        "input_tokens": 653419,
+        "cached_input_tokens": 621184,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 5005,
+        "reasoning_output_tokens": 177
+      },
+      "assessment": "functional_pass_after_recovery; new_view_visual_completion_required_evaluator_refresh"
+    }
+  },
+  "vams-independent-values": {
+    "rows": 464,
+    "failures": [
+      {
+        "row": 454,
+        "test": "reference_only_rise",
+        "actual": 0.45,
+        "expected": 0.6
+      },
+      {
+        "row": 455,
+        "test": "reference_only_fall",
+        "actual": 0.45,
+        "expected": 0.3
+      },
+      {
+        "row": 456,
+        "test": "reference_only_zero",
+        "actual": 0.45,
+        "expected": 0.0
+      },
+      {
+        "row": 458,
+        "test": "reference_only_restore",
+        "actual": 0.0,
+        "expected": 0.928125
+      }
+    ],
+    "model_unchanged": true,
+    "evidence": "/home/UFAD/nohgoering/.local/state/cadex/workflow-evals/collaboration_20261104_xv92vawi/vams/results/dac6-20261105T024927Z-38077/samples.csv"
+  },
+  "vams-mutation-results": {
+    "fixed_reference": {
+      "exit": 0,
+      "checks": 464,
+      "failures": 0,
+      "expected_pass": true
+    },
+    "wrong_gain": {
+      "exit": 1,
+      "checks": 464,
+      "failures": 386,
+      "expected_pass": false
+    },
+    "wrong_disable": {
+      "exit": 1,
+      "checks": 464,
+      "failures": 68,
+      "expected_pass": false
+    },
+    "stuck_zero": {
+      "exit": 1,
+      "checks": 464,
+      "failures": 575,
+      "expected_pass": false
+    }
+  },
+  "schematic-independent-result": {
+    "source_dc_V": 0.7,
+    "source_delta_y": -0.25,
+    "ground_delta_y": -0.25,
+    "terminal_net_maps_preserved": true,
+    "pins_on_wire_geometry": 10,
+    "instance_count": 5,
+    "shape_count": 14,
+    "instance_bbox_overlaps": [],
+    "unrelated_instances_unchanged": [
+      "M0",
+      "VOUT",
+      "G1"
+    ],
+    "other_cell_unchanged": true,
+    "BIAS_label_delta_y": -0.5,
+    "BIAS_label_still_on_wire": true
+  },
+  "layout-render-independent": {
+    "rendered_rectangles": 110,
+    "independent_saved_rectangles": 110,
+    "exact_rectangle_multiset_match": true,
+    "bbox": [
+      [
+        -1.2,
+        -2.8
+      ],
+      [
+        6.2,
+        6.25
+      ]
+    ],
+    "ports": [
+      "REF",
+      "OUT",
+      "VSS"
+    ]
+  },
+  "live-independent-results": {
+    "same_gui_pid": 160656,
+    "same_gui_start": "32158018",
+    "gui_alive_after_agent_and_fresh_clients": true,
+    "opened_other_existing_view": true,
+    "private_display_capture": true
+  },
+  "live-saved-independent-result": {
+    "source_dc_V": 0.65,
+    "source_delta_y": -0.25,
+    "ground_delta_y": -0.25,
+    "terminal_net_maps_preserved": true,
+    "pins_on_wire_geometry": 10,
+    "instance_count": 5,
+    "shape_count": 14,
+    "instance_bbox_overlaps": [],
+    "unrelated_instances_unchanged": [
+      "M0",
+      "VOUT",
+      "G1"
+    ],
+    "other_cell_unchanged": true
+  },
+  "cleanup-proof": {
+    "private_gui_running": false,
+    "private_server_running": false,
+    "post_cleanup_status": {
+      "sessions": [
+        {
+          "id": "cadex_0252f5553693403292340c0481e09c15",
+          "state": "invalid",
+          "reason": "Stale gui process"
+        }
+      ],
+      "attach_command": "load(\"/home/UFAD/nohgoering/.codex/share/cadex-live/bootstrap.il\")",
+      "contacts_gui": false
+    },
+    "protected_files_checked": 41,
+    "protected_files_changed": []
+  },
+  "physical_independent": {
+    "drc": {
+      "state": "complete",
+      "native_exit": 0,
+      "evidence": {
+        "errors": [
+          0,
+          0
+        ],
+        "deck": "/apps/cds/IC618/local/GPDK180/pv/assura/drc.rul",
+        "scope": "default deck; density/antenna not included"
+      }
+    },
+    "lvs": {
+      "state": "complete",
+      "native_exit": 0,
+      "evidence": {
+        "matched": true,
+        "ports": [
+          "REF",
+          "OUT",
+          "VSS"
+        ],
+        "source_mos_count": 2
+      }
+    }
+  },
+  "scope_notes": [
+    "One fresh run per task; not a reliability estimate.",
+    "VAMS case uses wreal/RNM, not electrical AMS co-simulation.",
+    "Live private bootstrap copy changes only runtime/state/log paths. Installed live client and job/recipe code remain unchanged.",
+    "Newly opened view initially captured blank; evaluator zoom/redraw made it visible. This was post-agent diagnosis, not an unassisted visual pass.",
+    "No existing GUI contacted; owned test GUI/server/display shut down."
+  ],
+  "final_batch_smoke": {
+    "status": 0,
+    "completion_marker": true,
+    "smoke_marker": true,
+    "library_count": 12,
+    "run": "~/.local/state/codex/virtuoso/virtuoso_batch_20261105T032600Z_EVwhBo"
+  },
+  "visual_scope": {
+    "layout_render_checked_against_saved_rectangles": true,
+    "new_private_GUI_view_first_capture_blank": true,
+    "evaluator_refresh_made_view_visible": true,
+    "TigerVNC_contacted": false,
+    "unassisted_live_visual_pass_claimed": false
+  }
+}

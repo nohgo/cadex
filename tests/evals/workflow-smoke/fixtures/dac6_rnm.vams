@@ -1,0 +1,15 @@
+`timescale 1ns/1ps
+module dac6_rnm(code, enable, vref, out);
+  input [5:0] code;
+  input enable;
+  input vref;
+  output out;
+  wreal vref, out;
+  real level;
+  initial level = 0.0;
+  always @(code or enable) begin
+    if (enable) level = vref * code / 64.0;
+    else level = 0.0;
+  end
+  assign out = level;
+endmodule

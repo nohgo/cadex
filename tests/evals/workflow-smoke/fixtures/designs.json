@@ -1,0 +1,103 @@
+{
+  "profile": "uf-gpdk180",
+  "library": "eval_ic",
+  "bias_demo": {
+    "view": "schematic",
+    "instances": {
+      "M0": {
+        "master": "gpdk180/nmos",
+        "origin": [
+          5,
+          3
+        ],
+        "w": "10u",
+        "l": "1u",
+        "nets": {
+          "D": "DOUT",
+          "G": "BIAS",
+          "S": "0",
+          "B": "0"
+        }
+      },
+      "VBIAS": {
+        "master": "analogLib/vdc",
+        "origin": [
+          1,
+          3
+        ],
+        "dc": "0.8",
+        "nets": {
+          "PLUS": "BIAS",
+          "MINUS": "gnd!"
+        }
+      },
+      "G0": {
+        "master": "analogLib/gnd",
+        "origin": [
+          1,
+          1.5
+        ]
+      },
+      "VOUT": {
+        "master": "analogLib/vdc",
+        "origin": [
+          8,
+          3
+        ],
+        "dc": "1.0",
+        "nets": {
+          "PLUS": "DOUT",
+          "MINUS": "gnd!"
+        }
+      },
+      "G1": {
+        "master": "analogLib/gnd",
+        "origin": [
+          8,
+          1.5
+        ]
+      }
+    }
+  },
+  "mirror_core": {
+    "schematic_instances": {
+      "MREF": {
+        "master": "gpdk180/nmos",
+        "origin": [
+          2,
+          3
+        ],
+        "w": "4u",
+        "l": "1u",
+        "nets": {
+          "D": "REF",
+          "G": "REF",
+          "S": "VSS",
+          "B": "VSS"
+        }
+      },
+      "MOUT": {
+        "master": "gpdk180/nmos",
+        "origin": [
+          5,
+          3
+        ],
+        "w": "4u",
+        "l": "1u",
+        "nets": {
+          "D": "OUT",
+          "G": "REF",
+          "S": "VSS",
+          "B": "VSS"
+        }
+      }
+    },
+    "ports": [
+      "REF",
+      "OUT",
+      "VSS"
+    ],
+    "initial_layout": null
+  },
+  "live_case_baseline": "A separate copy of the successfully saved batch schematic result (VBIAS=0.7, source and ground already translated by -0.25)."
+}
